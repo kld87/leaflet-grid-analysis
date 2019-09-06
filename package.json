@@ -1,0 +1,20 @@
+{
+	"author": {
+		"name": "Kevin Dawe",
+		"url": "http://kevindawe.ca"
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^5.10.2",
+		"bootstrap": "^4.3.1",
+		"jquery": "^3.4.1",
+		"leaflet": "^1.5.1",
+		"leaflet-control-geocoder": "^1.9.0",
+		"leaflet-geometryutil": "^0.9.1",
+		"leaflet-zoombox": "^0.5.1",
+		"lodash": "^4.17.15"
+	},
+	"devDependencies": {
+		"gulp": "^4.0.2",
+		"gulp-clean": "^0.4.0"
+	}
+}

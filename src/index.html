@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Leaflet Grid Analysis Sandbox</title>
+	<!-- JQuery -->
+	<script src="deps/jquery/dist/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="deps/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<link href="deps/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Leaflet -->
+	<script src="deps/leaflet/dist/leaflet.js"></script>
+	<link href="deps/leaflet/dist/leaflet.css" rel="stylesheet"/>
+	<!-- Leafelt Geometry Util -->
+	<script src="deps/leaflet-geometryutil/src/leaflet.geometryutil.js"></script>
+	<!-- Leaflet Geocoder -->
+	<script src="deps/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+	<link href="deps/leaflet-control-geocoder/dist/Control.Geocoder.css" rel="stylesheet"/>
+	<!-- Leaflet Zoombox -->
+	<link rel="stylesheet" href="deps/leaflet-zoombox/L.Control.ZoomBox.css" />
+	<script src="deps/leaflet-zoombox/L.Control.ZoomBox.min.js"></script>
+	<!-- lodash -->
+	<script src="deps/lodash/lodash.min.js"></script>
+	<!-- fontawesome -->
+	<link href="deps/fontawesome-free/css/all.min.css" rel="stylesheet"/>
+	<!-- Roboto font -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+	<!-- internal -->
+	<script src="script.js"></script>
+	<link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+
+<!-- map container -->
+<div id="map">
+	<div id="coords"></div>
+</div>
+
+<!-- welcome modal -->
+<div id="welcome-modal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="example-modal-label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="example-modal-label">Leaflet Grid Analysis Sandbox</h4>
+				<!-- hide this initially, show after first run-thru, so user can abort the "reset" modal -->
+				<button id="welcome-close" type="button" class="close d-none" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="welcome-step-1">
+					<h5>Welcome!</h5>
+					<p>At a glance: this project uses Leaflet, some native and 3rd-party controls, plus some custom code I've written to create a fixed-length grid to perform performant point-to-point analysis, along with heatmap-inspired grid styling.
+					<p>Try zooming in/out, click some markers, then explore the control bar in the top right for more functionality and information.</p>
+					<p>Now let's get started!</p>
+				</div>
+				<div id="welcome-step-2">
+					<h5>Choose a Basemap</h5>
+					<div id="basemap-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+						<ol class="carousel-indicators">
+							<li data-target="#basemap-carousel" data-slide-to="0" class="active"></li>
+							<li data-target="#basemap-carousel" data-slide-to="1"></li>
+							<li data-target="#basemap-carousel" data-slide-to="2"></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img class="d-block w-100" src="img/voyager.png" alt="CartoDB Voyager Basemap">
+								<div class="carousel-caption d-none d-block">
+									<p>CartoDB Voyager</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img class="d-block w-100" src="img/positron.png" alt="CartoDB Positron Basemap">
+								<div class="carousel-caption d-none d-block">
+									<p>CartoDB Positron</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img class="d-block w-100" src="img/osm.png" alt="OSM Basemap">
+								<div class="carousel-caption d-none d-block">
+									<p>OpenStreetMap (OSM)</p>
+								</div>
+							</div>
+						</div>
+						<a class="carousel-control-prev" href="#basemap-carousel" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#basemap-carousel" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					<small class="form-text text-muted"><b>Note:</b> the basemaps are from public providers and may occasionally be slow (the OSM basemaps seem especially susceptible to this). Selection may be changed afterwards via the layer switcher on the right.</small>
+				</div>
+				<div id="welcome-step-3">
+					<h5>Parameters</h5>
+					<form>
+						<div class="form-group">
+							<label for="radius-m">Radius (km)</label>
+							<select id="radius-m" class="form-control">
+								<option value="1000">1 km</option>
+								<option value="2000">2 km</option>
+								<option value="5000">5 km</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="point-num">Number of Points</label>
+							<select id="point-num" class="form-control">
+								<option value="100">100</option>
+								<option value="250">250</option>
+								<option value="500">500</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="cell-len">Grid Cell Length (m)</label>
+							<select id="cell-len" class="form-control">
+								<option value="250">250 m</option>
+								<option value="500">500 m</option>
+								<option value="1000">1,000 m</option>
+							</select>
+							<small class="form-text text-muted">Grid will display lat/lng and coordinates when zoomed in, and will be hidden when zoomed out far enough.</small>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="welcome-step-back" class="btn btn-secondary" type="button" onclick="step(-1)">Back</button>
+				<button id="welcome-step-next" class="btn btn-primary" type="button" onclick="step(1)">Next</button>
+				<button id="welcome-step-go" class="btn btn-success" type="button" data-dismiss="modal" onclick="initialize()">Let's Go!</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- about modal -->
+<div id="about-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="about-modal-label" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="about-modal-label">About</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>This project was my first introduction to Leaflet, and compared to my previous experience with OpenLayers, I definitely prefer Leaflet (and the FOSS GIS community seems to agree).</p>
+			<p>Here I've implemented a basic viewer with some standard controls, plus 3rd-party ones like a <a href="https://github.com/perliedman/leaflet-control-geocoder">geocoder</a> and <a href="https://github.com/consbio/Leaflet.ZoomBox">zoombox</a>. I've done my best to ensure a consistent experience between desktop, tablet, and phone users.</p>
+			<p>At the heart of this sandbox is a customized GridLayer that overlays a grid of fixed length (ie. metres) instead of its usual purpose of scaling and serving tiles of a fixed pixel width (generally 256px imagery for basemaps). The layer will scale appropriately based on zoom to represent this static length. At lower zoom levels each quadrant's coordinates will be overlaid. At higher zooms, the grid will be hidden for efficiency's sake.</p>
+			<p>Points are randomly generated and stored relative to what grid quadrant they fall in. This facilitates performant point-to-point analysis based on proximity, instead of having to compare each point to each other point. From there I've implemented a heatmap-style colouring scheme to colour each grid quadrant based on how many points it contains. Users can click on a point to see relevant information, including how many other points are in its own and adjacent quadrants, plus a related density "score".</p>
+			<p>I also made a custom toolbar control (top right) which includes toggleable add/remove marker controls, which are useful for interacting with the grid to see how it reacts. Adding and removing markers will cause the grid's heatmap styling to update on the fly.</p>
+			<p>To see the code, head on over to my <a href="https://github.com/kld87">github</a>, and for more info about me, check out <a href="http://kevindawe.ca">kevindawe.ca</a>.</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+* {
+	/* domo arigato, font-family roboto! */
+	font-family: 'Roboto', sans-serif;
+
+	/*square corners for bootstrap */
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+}
+
+/* remove bootstrap label padding, makes layer switcher look bad */
+label {
+	margin: 0;
+}
+
+/* keep warning button's text white for consistency, including hover & etc. states */
+.btn-warning {
+	color: #fff !important;
+}
+
+/* make carousel controls/text dark since our images are light */
+.carousel-control-prev-icon {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+.carousel-control-next-icon {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+.carousel-indicators li {
+	background-color: #666;
+}
+.carousel-caption > p {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	color: #666;
+	text-shadow:
+		-1px -1px 0 #fff,
+		1px -1px 0 #fff,
+		-1px 1px 0 #fff,
+		1px 1px 0 #fff;
+}
+
+/* make button icon clicks target the button, not icon */
+button > i {
+	/* https://stackoverflow.com/a/17085569 */
+	pointer-events: none;
+}
+
+/* map container */
+#map {
+	position: absolute;
+	top: 5px;
+	bottom: 5px;
+	left: 5px;
+	right: 5px;
+	border: 1px solid gray;
+}
+
+/* coordinates overlay */
+#coords {
+	position: absolute;
+	left: 5px;
+	bottom: 38px;
+	z-index: 1000;
+
+	font-size: 11px;
+	color: #666;
+}
+
+/* toolbar styles */
+.toolbar {
+	padding: 5px;
+	background-color: white;
+}
+
+.toolbar-button, .toolbar-toggle {
+	margin-left: 3px;
+	margin-right: 3px;
+	width: 45px;
+}
+
+.toolbar-toggle-inactive {
+	opacity: 0.5;
+}
+
+.toolbar-break {
+	display: inline-block;
+	vertical-align: middle;
+	height: 38px;
+	border: 2px solid #999;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+/* other styles */
+.grid-tile {
+	border: 1px solid gray;
+	font-size: 10px;
+	color: gray;
+}
