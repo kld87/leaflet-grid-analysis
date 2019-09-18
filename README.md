@@ -4,6 +4,10 @@ At a glance: this project uses Leaflet, some native and 3rd-party controls, plus
 
 Try zooming in/out, click some markers, then explore the control bar in the top right for more functionality and information.
 
+## Demo
+
+[http://kevindawe.ca/lgas](http://kevindawe.ca/lgas)
+
 ## USAGE
 
 * npm i
